@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			body{
+				height: 2000px;
+			}
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			#one{
+				width: 300px;
+				height: 300px;
+				background: #01DF3A;
+			}
+			#two{
+				width: 300px;
+				height: 300px;
+				background: #0000FF;
+				color: #fff;
+				font-size: 100px;
+				text-align: center;
+			}
+			#round{
+				width: 100px;
+				height: 100px;
+				background: red;
+				border-radius: 50%;
+				position: absolute;
+				left: 0;
+				top: 0;
+			}
+			#three{
+				width: 300px;
+				height: 300px;
+				background: #81F7F3;
+				color: #fff;
+				font-size: 100px;
+				text-align: center;
+			}
+			/* 选中区域内容 */
+			::selection{
+				background: #0000FF;
+				color: red;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="one" onclick="sum()"></div>
+		<div id="two">two</div>
+		<div id="round"></div>
+		<div id="three">three</div>
+		<textarea id= "inp"rows="30" cols="60">
+			
+		</textarea>
+
+		<script type="text/javascript">
+		
+			/*
+			view-source:地址---  查看源代码
+			
+			
+			JS中的事件类型
+			1.鼠标事件(单机,双击,长按,右击,鼠标移入,鼠标移出,移出,拖拽,鼠标滚动)
+			2.键盘事件
+			3.移动端事件(触摸,双击,长按,轻扫,捏合)
+			4.其他事件(微信摇一摇,手机横竖屏操作,微信计步等)
+			
+			添加事件的方式之一:on+事件类型
+			特点:同一个对象同时添加多次同一类型事件，后面会覆盖前面的
+			
+			clientX和clientY点击的点距离可视窗口的左边距和上边距
+			offsetX和offsetY点击的点距离自身标签的左边距和上边距
+			pageX和pageY点击的点距离body内容区域的左边距和上边距
+			*/ 
+		   
+		   function sum(){
+			   console.log("hello");
+		   }
+		   var oneDiv = document.getElementById("one");
+		   oneDiv.onclick = function(){
+			   console.log("点击oneDiv")
+		   }
+		   oneDiv.onclick = function(){
+		   	   console.log("点击oneDiv1")
+		   }
+		   
+		   //添加事件的方式二
+		   //特点:同一对象同时添加多次都会执行
+		   oneDiv.addEventListener('click',function(){
+			   console.log("click");
+		   },false)
+		   
+		   var twoDiv = document.getElementById("two");
+		   twoDiv.onmousedown = function(){
+			   console.log("鼠标按下");
+		   }
+		    twoDiv.onmouseup = function(){
+				console.log("鼠标松开");
+		   }
+		   //每个事件触发时,都会产生一个事件对象,event该事件对象包含了触发事件时标签对象的信息
+		   twoDiv.onclick = function(e){
+			   console.log("鼠标点击");
+			   //window.event 非火狐浏览器事件对象
+			   //浏览器兼容
+			   var event1 = window.event || e;
+			   console.log(event1)
+			   console.log(event1.clientX);
+			   console.log(event1.clientY);
+			   // event1.target也就是this 
+			   event1.target.style.width = "500px";
+			   event1.target.style.background = "pink";
+		   }
+		   //鼠标移动事件 触发时机:只要鼠标点的位置改变,则触发
+		   twoDiv.onmousemove = function(e){
+			   var event1 = window.event || e;
+			   // console.log("移动");
+			   // console.log(event1)
+		   }
+		   
+		   var round = document.getElementById("round");
+		   document.onmousemove = function(e){
+			   var event1 = window.event || e;
+               round.style.left = event1.clientX-50 +"px";
+               round.style.top = event1.clientY-50 +"px";
+		   }
+		   
+		   
+		   var timeId;
+		   // 点击 双击事件
+		   var threeDiv = document.getElementById("three");
+		   threeDiv.onclick = function(){
+			   //清除上一次的延迟器
+			   clearTimeout(timeId);
+			   timeId = setTimeout(function(){
+				    console.log("单击事件");
+				   threeDiv.style.background = "black";
+			   },200);
+
+		   }
+		   threeDiv.ondblclick = function(){
+			   //取消单击事件----取消延迟器
+			   clearTimeout(timeId);
+			   console.log("双击事件");
+			   threeDiv.style.borderRadius = "50%";
+		   }
+		   // 1.  单击事件0.2秒延迟执行 在此期间如果触发了双击事件,则取消单击事件
+		   
+		   
+		   
+		   
+		   //鼠标右键事件
+		   document.oncontextmenu = function(){
+			   console.log("鼠标右键");
+			   document.body.style.backgroundColor = "orange";
+			   return false;//禁止系统默认事件触发
+		   }
+		   
+		   
+		   
+		   var inpObj = document.getElementById("inp");
+		   //复制操作
+		   inpObj.oncopy = function(){
+			   alert("复制操作");
+			   document.body.style.backgroundColor = "orange";
+			   return false;//禁止系统默认操作
+		   }
+		   //粘贴操作
+		   inpObj.onpaste = function(){
+			   alert("粘贴事件");
+			   // return false;//禁止系统默认操作
+		   }
+		   //剪切操作
+		   inpObj.oncut = function(){
+			   alert("剪切事件");
+			   // return false;//禁止系统默认操作
+		   }
+		   //选中操作
+		   inpObj.onselectstart = function(){
+			   alert("选中");
+			   return false;//禁止系统默认操作
+		   }
+
+			
+			
+		</script>
+	</body>
+</html>
